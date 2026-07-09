@@ -1,0 +1,1 @@
+Protected routes are enforced in each server page so login remains shell-free.
