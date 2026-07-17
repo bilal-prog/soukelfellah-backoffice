@@ -13,6 +13,8 @@ import type {
   MarketingPayload,
   NotificationsResponse,
   Category,
+  MeasurementUnit,
+  ProductType,
   AuditLogsResponse,
 } from "@/lib/types";
 
@@ -339,9 +341,103 @@ export async function getAuditLogs(params?: URLSearchParams): Promise<AuditLogsR
   return backendGet<AuditLogsResponse>(withSearchParams("/api/audit-logs", params));
 }
 
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(params?: URLSearchParams): Promise<Category[]> {
   const response = await backendGet<Category[] | { success: boolean; data: Category[] }>(
-    "/api/categories"
+    withSearchParams("/api/categories", params)
   );
   return Array.isArray(response) ? response : (response as any).data;
+}
+
+export async function createCategory(body: unknown): Promise<Category> {
+  const response = await backendPost<Category | { success: boolean; data: Category }>(
+    "/api/categories",
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function updateCategory(categoryId: string, body: unknown): Promise<Category> {
+  const response = await backendPut<Category | { success: boolean; data: Category }>(
+    `/api/categories/${categoryId}`,
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function getMeasurementUnits(params?: URLSearchParams): Promise<MeasurementUnit[]> {
+  const response = await backendGet<MeasurementUnit[] | { success: boolean; data: MeasurementUnit[] }>(
+    withSearchParams("/api/measurement-units", params)
+  );
+  return Array.isArray(response) ? response : (response as any).data;
+}
+
+export async function createMeasurementUnit(body: unknown): Promise<MeasurementUnit> {
+  const response = await backendPost<MeasurementUnit | { success: boolean; data: MeasurementUnit }>(
+    "/api/measurement-units",
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function getProductTypes(params?: URLSearchParams): Promise<ProductType[]> {
+  const response = await backendGet<ProductType[] | { success: boolean; data: ProductType[] }>(
+    withSearchParams("/api/product-types", params)
+  );
+  return Array.isArray(response) ? response : (response as any).data;
+}
+
+export async function createProductType(body: unknown): Promise<ProductType> {
+  const response = await backendPost<ProductType | { success: boolean; data: ProductType }>(
+    "/api/product-types",
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function deleteCategory(id: string): Promise<void> {
+  await backendDelete(`/api/categories/${id}`);
+}
+
+export async function updateMeasurementUnit(id: string, body: unknown): Promise<MeasurementUnit> {
+  const response = await backendPut<MeasurementUnit | { success: boolean; data: MeasurementUnit }>(
+    `/api/measurement-units/${id}`,
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function deleteMeasurementUnit(id: string): Promise<void> {
+  await backendDelete(`/api/measurement-units/${id}`);
+}
+
+export async function updateProductType(id: string, body: unknown): Promise<ProductType> {
+  const response = await backendPut<ProductType | { success: boolean; data: ProductType }>(
+    `/api/product-types/${id}`,
+    body
+  );
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function deleteProductType(id: string): Promise<void> {
+  await backendDelete(`/api/product-types/${id}`);
+}
+
+export async function uploadFiles(formData: FormData) {
+  return executeWithAuthRetry(async (headers) => {
+    const response = await axios.post(
+      backendUrl("/api/files/upload"),
+      formData,
+      {
+        headers: {
+          ...headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  });
+}
+
+export async function deleteFile(id: string): Promise<void> {
+  await backendDelete(`/api/files/${id}`);
 }

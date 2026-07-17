@@ -66,16 +66,17 @@ export type Category = {
   _id: string;
   name: string;
   slug: string;
-  icon?: string;
+  icon?: string | { _id: string; url: string };
   isActive: boolean;
 };
 
 export type ProductType = {
   _id: string;
-  categoryId: string;
+  categoryId: string | Category;
   name: string;
   slug: string;
   allowedUnits: string[] | any[];
+  isActive?: boolean;
 };
 
 export type MeasurementUnit = {

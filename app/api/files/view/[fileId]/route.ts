@@ -7,7 +7,8 @@ export async function GET(
 ) {
   try {
     const { fileId } = await params;
-    const backendUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/files/view/${fileId}`;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
+    const backendUrl = `${baseUrl}/api/files/view/${fileId}`;
 
     const response = await axios.get(backendUrl, {
       responseType: "arraybuffer",

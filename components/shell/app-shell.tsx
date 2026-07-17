@@ -13,6 +13,9 @@ import {
   LogOut,
   Menu,
   X,
+  Layers,
+  Scale,
+  List,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,6 +31,9 @@ const adminNav = [
   { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/admin/users", label: "Gestion des utilisateurs", icon: Users },
   { href: "/admin/listings", label: "Modération des annonces", icon: Sprout },
+  { href: "/admin/categories", label: "Catégories", icon: List },
+  { href: "/admin/measurement-units", label: "Unités de mesure", icon: Scale },
+  { href: "/admin/product-types", label: "Types de produits", icon: Layers },
   { href: "/admin/reports", label: "Signalements", icon: AlertTriangle },
   { href: "/admin/locations", label: "Communes & Villes", icon: MapPin },
   { href: "/admin/notifications", label: "Campagnes Marketing", icon: Bell },

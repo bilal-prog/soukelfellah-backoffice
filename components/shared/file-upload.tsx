@@ -63,15 +63,14 @@ export function FileUpload({
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (res.data && res.data.success && Array.isArray(res.data.files)) {
-        const newFileIds = res.data.files.map((f: any) => f._id);
+      if (res.data && res.data.success && Array.isArray(res.data.data)) {
+        const newFileIds = res.data.data.map((f: any) => f._id);
 
         if (maxFiles === 1) {
           onChange(newFileIds[0]);
         } else {
           onChange([...fileIds, ...newFileIds]);
         }
-        toast.success("Files uploaded successfully");
       } else {
         toast.error("Failed to upload files");
       }
@@ -110,23 +109,11 @@ export function FileUpload({
     }
   };
 
-  const handleRemove = async (idToRemove: string) => {
-    try {
-      await clientApi.delete(`/files/${idToRemove}`);
-
-      if (maxFiles === 1) {
-        onChange("");
-      } else {
-        onChange(fileIds.filter((id) => id !== idToRemove));
-      }
-      toast.success("File removed");
-    } catch {
-      if (maxFiles === 1) {
-        onChange("");
-      } else {
-        onChange(fileIds.filter((id) => id !== idToRemove));
-      }
-      toast.info("File removed from list");
+  const handleRemove = (idToRemove: string) => {
+    if (maxFiles === 1) {
+      onChange("");
+    } else {
+      onChange(fileIds.filter((id) => id !== idToRemove));
     }
   };
 
