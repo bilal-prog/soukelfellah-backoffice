@@ -272,6 +272,11 @@ export async function activateUser(userId: string) {
   return backendPut(`/api/users/${userId}/activate`, {});
 }
 
+export async function resetUserPassword(userId: string, newPassword: string) {
+  return backendPut(`/api/users/${userId}/reset-password`, { newPassword });
+}
+
+
 // Listings
 export async function getListings(params?: URLSearchParams): Promise<ListingsResponse> {
   return backendGet<ListingsResponse>(withSearchParams("/api/listings", params));

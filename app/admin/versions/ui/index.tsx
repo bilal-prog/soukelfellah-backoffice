@@ -155,7 +155,7 @@ export function AdminVersionsClient() {
               <Label htmlFor="platform">Système d'exploitation</Label>
               <Select value={platform} onValueChange={(val: any) => setPlatform(val)}>
                 <SelectTrigger id="platform">
-                  <SelectValue />
+                  <SelectValue placeholder="Sélectionner..." />
                 </SelectTrigger>
                 <SelectContent className="z-[9999]">
                   <SelectItem value="android">Android</SelectItem>
