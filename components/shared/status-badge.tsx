@@ -7,6 +7,7 @@ const styles: Record<string, string> = {
   completed: "border-sky-200 bg-sky-50 text-sky-700",
   cancelled: "border-rose-200 bg-rose-50 text-rose-700",
   active: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  paused: "border-orange-200 bg-orange-50 text-orange-700",
   inactive: "border-slate-200 bg-slate-50 text-slate-600",
   draft: "border-slate-200 bg-slate-50 text-slate-600",
   published: "border-emerald-200 bg-emerald-50 text-emerald-700",

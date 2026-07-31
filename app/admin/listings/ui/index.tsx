@@ -3,6 +3,7 @@
 import {
   CheckCircle,
   XCircle,
+  PauseCircle,
   Trash2,
   Search,
   MapPin,
@@ -80,21 +81,23 @@ export function AdminListingsClient() {
     },
   });
 
-  // Moderate listing mutation (approve/reject)
+  // Moderate listing mutation (approve/pause/reject)
   const moderateMutation = useMutation({
     mutationFn: async ({
       id,
       status,
     }: {
       id: string;
-      status: "active" | "rejected";
+      status: "active" | "paused" | "rejected";
     }) => clientApi.put(`/listings/${id}`, { status }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin-listings"] });
       const msg =
         variables.status === "active"
           ? "Annonce approuvée (activée)"
-          : "Annonce rejetée";
+          : variables.status === "paused"
+            ? "Annonce mise en pause"
+            : "Annonce rejetée";
       toast.success(msg);
       // Update modal state if active
       if (selectedListing && selectedListing._id === variables.id) {
@@ -250,6 +253,7 @@ export function AdminListingsClient() {
             const province = listing.location?.province || "-";
 
             const isApproved = listing.status === "active";
+            const isPaused = listing.status === "paused";
             const isRejected = listing.status === "rejected";
 
             // Resolve listing first image url
@@ -340,6 +344,23 @@ export function AdminListingsClient() {
                         }
                       >
                         <CheckCircle className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {!isPaused && (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 text-orange-600 hover:bg-orange-500 hover:text-white border-orange-200"
+                        title="Mettre en pause"
+                        disabled={moderateMutation.isPending}
+                        onClick={() =>
+                          moderateMutation.mutate({
+                            id: listing._id,
+                            status: "paused",
+                          })
+                        }
+                      >
+                        <PauseCircle className="h-4 w-4" />
                       </Button>
                     )}
                     {!isRejected && (
@@ -535,6 +556,23 @@ export function AdminListingsClient() {
                     >
                       <CheckCircle className="h-4 w-4" />
                       <span>Approuver l'annonce</span>
+                    </Button>
+                  )}
+                  {selectedListing.status !== "paused" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 border-orange-200 text-orange-600 hover:bg-orange-500 hover:text-white"
+                      disabled={moderateMutation.isPending}
+                      onClick={() =>
+                        moderateMutation.mutate({
+                          id: selectedListing._id,
+                          status: "paused",
+                        })
+                      }
+                    >
+                      <PauseCircle className="h-4 w-4" />
+                      <span>Mettre en pause</span>
                     </Button>
                   )}
                   {selectedListing.status !== "rejected" && (
