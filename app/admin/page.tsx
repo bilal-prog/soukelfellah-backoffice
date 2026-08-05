@@ -1,4 +1,4 @@
-import { AlertTriangle, Sprout, ShoppingBag, Users, ArrowRight } from "lucide-react";
+import { AlertTriangle, Sprout, ShoppingBag, Users, ArrowRight, Eye, Phone, MessageSquare, Activity } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,9 @@ export default async function AdminDashboardPage() {
     totalListings: 0,
     totalActiveListings: 0,
     totalReports: 0,
+    totalViews: 0,
+    totalCalls: 0,
+    totalMessages: 0,
   }));
 
   const listingsRes = await getListings(
@@ -42,12 +45,32 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard title="Utilisateurs inscrits" value={stats.totalUsers} icon={Users} />
-          <StatCard title="Annonces créées" value={stats.totalListings} icon={ShoppingBag} />
-          <StatCard title="Annonces actives" value={stats.totalActiveListings} icon={Sprout} />
-          <StatCard title="Signalements en cours" value={stats.totalReports} icon={AlertTriangle} />
+        {/* Stats Grid - General Metrics */}
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+            Aperçu Général
+          </h3>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard title="Utilisateurs inscrits" value={stats.totalUsers} icon={Users} />
+            <StatCard title="Annonces créées" value={stats.totalListings} icon={ShoppingBag} />
+            <StatCard title="Annonces actives" value={stats.totalActiveListings} icon={Sprout} />
+            <StatCard title="Signalements en cours" value={stats.totalReports} icon={AlertTriangle} />
+          </div>
+        </section>
+
+        {/* Stats Grid - Engagement & Platform KPIs */}
+        <section className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Activity className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Engagements & Interactions (KPIs)
+            </h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <StatCard title="Total Vues des Annonces" value={stats.totalViews ?? 0} icon={Eye} />
+            <StatCard title="Total Appels Vendeurs" value={stats.totalCalls ?? 0} icon={Phone} />
+            <StatCard title="Total Messages / Discutés" value={stats.totalMessages ?? 0} icon={MessageSquare} />
+          </div>
         </section>
 
         {/* Recent Listings Table */}
@@ -56,7 +79,7 @@ export default async function AdminDashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <div>
                 <CardTitle className="text-lg font-bold">Annonces Récentes</CardTitle>
-                <CardDescription>Les 5 dernières annonces publiées sur le marché.</CardDescription>
+                <CardDescription>Les 5 dernières annonces publiées sur le marché et leur performance.</CardDescription>
               </div>
               <Button asChild variant="outline" size="sm" className="gap-1 text-xs">
                 <Link href="/admin/listings">
@@ -67,7 +90,7 @@ export default async function AdminDashboardPage() {
             </CardHeader>
             <CardContent>
               {listingsRes?.data?.length ? (
-                <DataTable headers={["Titre", "Catégorie", "Prix", "Vendeur", "Statut", "Date de publication"]}>
+                <DataTable headers={["Titre", "Catégorie", "Prix", "Vendeur", "KPIs (Vues/Appels/Msgs)", "Statut", "Date de publication"]}>
                   {listingsRes.data.map((listing) => {
                     const sellerUser = listing.sellerId;
                     const sellerName = typeof sellerUser === "object" && sellerUser
@@ -89,6 +112,22 @@ export default async function AdminDashboardPage() {
                           {listing.price} DH
                         </td>
                         <td className="px-4 py-3 text-sm text-muted-foreground">{sellerName}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900/50 font-medium" title="Vues">
+                              <Eye className="h-3 w-3 text-sky-500" />
+                              {listing.viewsCount ?? 0}
+                            </span>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-900/50 font-medium" title="Appels">
+                              <Phone className="h-3 w-3 text-emerald-500" />
+                              {listing.callsCount ?? 0}
+                            </span>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50 font-medium" title="Messages">
+                              <MessageSquare className="h-3 w-3 text-indigo-500" />
+                              {listing.messagesCount ?? 0}
+                            </span>
+                          </div>
+                        </td>
                         <td className="px-4 py-3">
                           <StatusBadge value={listing.status} />
                         </td>

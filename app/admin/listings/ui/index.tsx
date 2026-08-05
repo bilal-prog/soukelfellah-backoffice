@@ -8,6 +8,8 @@ import {
   Search,
   MapPin,
   Eye,
+  Phone,
+  MessageSquare,
   X,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -235,6 +237,7 @@ export function AdminListingsClient() {
             "Catégorie",
             "Prix",
             "Vendeur",
+            "KPIs / Engagements",
             "Province",
             "Statut",
             "Date",
@@ -314,6 +317,31 @@ export function AdminListingsClient() {
                 </td>
                 <td className="px-4 py-3 text-sm text-muted-foreground">
                   {seller}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900/50 font-medium"
+                      title="Vues"
+                    >
+                      <Eye className="h-3 w-3 text-sky-500" />
+                      {listing.viewsCount ?? 0}
+                    </span>
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-900/50 font-medium"
+                      title="Appels"
+                    >
+                      <Phone className="h-3 w-3 text-emerald-500" />
+                      {listing.callsCount ?? 0}
+                    </span>
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50 font-medium"
+                      title="Messages"
+                    >
+                      <MessageSquare className="h-3 w-3 text-indigo-500" />
+                      {listing.messagesCount ?? 0}
+                    </span>
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
@@ -525,6 +553,48 @@ export function AdminListingsClient() {
                   <span className="mt-1 block w-fit">
                     <StatusBadge value={selectedListing.status} />
                   </span>
+                </div>
+              </div>
+
+              {/* Performance KPIs Section */}
+              <div className="border-t pt-4 space-y-2">
+                <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">
+                  Performance & Engagements (KPIs)
+                </h4>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-card/60 shadow-xs">
+                    <div className="p-2 rounded-lg bg-sky-50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400">
+                      <Eye className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground block">Vues</span>
+                      <span className="font-bold text-base text-foreground">
+                        {selectedListing.viewsCount ?? 0}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-card/60 shadow-xs">
+                    <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400">
+                      <Phone className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground block">Appels</span>
+                      <span className="font-bold text-base text-foreground">
+                        {selectedListing.callsCount ?? 0}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-card/60 shadow-xs">
+                    <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400">
+                      <MessageSquare className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground block">Messages</span>
+                      <span className="font-bold text-base text-foreground">
+                        {selectedListing.messagesCount ?? 0}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 

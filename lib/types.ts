@@ -118,7 +118,9 @@ export type Listing = {
   images: FileUpload[] | string[];
   location: UserLocation;
   status: ListingStatus;
-  viewsCount: number;
+  viewsCount?: number;
+  callsCount?: number;
+  messagesCount?: number;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -172,6 +174,9 @@ export type AdminStats = {
   totalListings: number;
   totalReports: number;
   totalActiveListings: number;
+  totalViews?: number;
+  totalCalls?: number;
+  totalMessages?: number;
 };
 
 export type AppVersion = {
