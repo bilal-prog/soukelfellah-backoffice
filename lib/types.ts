@@ -206,3 +206,13 @@ export type AuditLog = {
 };
 
 export type AuditLogsResponse = PaginatedResponse<AuditLog>;
+
+export type Setting = {
+  _id?: string;
+  phone: string;
+  contactEmail: string;
+  supportEmail: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+

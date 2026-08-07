@@ -16,6 +16,7 @@ import type {
   MeasurementUnit,
   ProductType,
   AuditLogsResponse,
+  Setting,
 } from "@/lib/types";
 
 const TOKEN_COOKIE = "soukelfellah_access_token";
@@ -446,3 +447,14 @@ export async function uploadFiles(formData: FormData) {
 export async function deleteFile(id: string): Promise<void> {
   await backendDelete(`/api/files/${id}`);
 }
+
+export async function getSettings(): Promise<Setting> {
+  const response = await backendGet<Setting | { success: boolean; data: Setting }>("/api/settings");
+  return "data" in response ? (response as any).data : response;
+}
+
+export async function updateSettings(body: Partial<Setting>): Promise<Setting> {
+  const response = await backendPut<Setting | { success: boolean; data: Setting }>("/api/settings", body);
+  return "data" in response ? (response as any).data : response;
+}
+

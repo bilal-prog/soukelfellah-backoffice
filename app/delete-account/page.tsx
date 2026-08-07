@@ -1,12 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2, Phone, AlertTriangle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CheckCircle2, Phone, AlertTriangle, Loader2 } from "lucide-react";
+import { clientApi } from "@/lib/client-api";
+import type { Setting } from "@/lib/types";
 
 export default function DeleteAccountPage() {
   const [phone, setPhone] = useState("");
   const [reason, setReason] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loadingSettings, setLoadingSettings] = useState(true);
+  const [supportPhone, setSupportPhone] = useState("+212 5 22 00 00 00");
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        setLoadingSettings(true);
+        const { data } = await clientApi.get<Setting | { data: Setting }>("/settings");
+        const settingData = "data" in data && data.data ? (data.data as Setting) : (data as Setting);
+        if (settingData?.phone) {
+          setSupportPhone(settingData.phone);
+        }
+      } catch (e) {
+        // Fallback default phone is kept
+      } finally {
+        setLoadingSettings(false);
+      }
+    }
+    fetchSettings();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,7 +116,12 @@ export default function DeleteAccountPage() {
 
         {/* Support Footer */}
         <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-8 text-center text-xs text-slate-500">
-          Besoin d'assistance directe ? Contactez le support WhatsApp : <strong>+212 7 22 95 78 26</strong>
+          Besoin d'assistance directe ? Contactez le support WhatsApp :{" "}
+          {loadingSettings ? (
+            <Loader2 className="h-3 w-3 animate-spin inline text-emerald-600 ml-1" />
+          ) : (
+            <strong>{supportPhone}</strong>
+          )}
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ import {
   Layers,
   Scale,
   List,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -38,6 +39,7 @@ const adminNav = [
   { href: "/admin/locations", label: "Communes & Villes", icon: MapPin },
   { href: "/admin/notifications", label: "Campagnes Marketing", icon: Bell },
   { href: "/admin/versions", label: "Versions de l'application", icon: RefreshCw },
+  { href: "/admin/settings", label: "Paramètres & Légal", icon: Settings },
   { href: "/admin/audit-logs", label: "Historique des actions", icon: FileText }
 ];
 
