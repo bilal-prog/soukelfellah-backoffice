@@ -30,10 +30,29 @@ export default function DeleteAccountPage() {
     fetchSettings();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone || phone.trim().length < 10) return;
-    setSubmitted(true);
+    try {
+      setSubmitting(true);
+      setErrorMsg(null);
+      await clientApi.post("/delete-account-request", {
+        phone: phone.trim(),
+        reason: reason.trim(),
+      });
+      setSubmitted(true);
+    } catch (err: any) {
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Impossible d'envoyer la demande. Veuillez réessayer.";
+      setErrorMsg(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -105,11 +124,25 @@ export default function DeleteAccountPage() {
               />
             </div>
 
+            {errorMsg && (
+              <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-xs text-red-700 dark:text-red-300">
+                {errorMsg}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm"
+              disabled={submitting}
+              className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
             >
-              Confirmer la demande de suppression
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Envoi en cours...</span>
+                </>
+              ) : (
+                <span>Confirmer la demande de suppression</span>
+              )}
             </button>
           </form>
         )}

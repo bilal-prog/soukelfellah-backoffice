@@ -244,6 +244,14 @@ export async function login(body: { phone: string; password: string }) {
   return response.data;
 }
 
+export async function requestDeleteAccount(body: { phone: string; reason?: string }) {
+  return backendPost<{ success: boolean; message: string }>(
+    "/api/users/delete-account-request",
+    body,
+    false
+  );
+}
+
 export async function getCurrentUser() {
   const response = await backendGet<User | { success: boolean; data: User }>("/api/users/me");
   const data = "data" in response ? response.data : response;
