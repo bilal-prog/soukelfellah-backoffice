@@ -74,7 +74,7 @@ export function AdminListingsClient() {
         params.append("search", debouncedSearch.trim());
       if (categoryId !== "all") params.append("categoryId", categoryId);
       if (type !== "all") params.append("type", type);
-      if (status !== "all") params.append("status", status);
+      if (status) params.append("status", status);
 
       const { data } = await clientApi.get<ListingsResponse>("/listings", {
         params,
