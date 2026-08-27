@@ -42,6 +42,7 @@ export default function DeleteAccountPage() {
       await clientApi.post("/delete-account-request", {
         phone: phone.trim(),
         reason: reason.trim(),
+        source: "web_page",
       });
       setSubmitted(true);
     } catch (err: any) {
