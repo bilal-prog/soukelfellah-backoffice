@@ -212,6 +212,13 @@ export type Setting = {
   phone: string;
   contactEmail: string;
   supportEmail: string;
+  isInMaintenance?: boolean;
+  maintenanceMessage?: {
+    fr?: string;
+    ar?: string;
+    en?: string;
+    ary?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 };
