@@ -213,6 +213,7 @@ export type Setting = {
   contactEmail: string;
   supportEmail: string;
   isInMaintenance?: boolean;
+  notifyAdminOnNewListing?: boolean;
   maintenanceMessage?: {
     fr?: string;
     ar?: string;

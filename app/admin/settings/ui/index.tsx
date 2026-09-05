@@ -11,6 +11,7 @@ import {
   Loader2,
   Wrench,
   Globe,
+  BellRing,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ export function AdminSettingsClient() {
   
   // Maintenance Mode states
   const [isInMaintenance, setIsInMaintenance] = useState(false);
+  const [notifyAdminOnNewListing, setNotifyAdminOnNewListing] = useState(false);
   const [msgFr, setMsgFr] = useState("");
   const [msgAr, setMsgAr] = useState("");
   const [msgEn, setMsgEn] = useState("");
@@ -46,6 +48,7 @@ export function AdminSettingsClient() {
           setContactEmail(settingData.contactEmail || "");
           setSupportEmail(settingData.supportEmail || "");
           setIsInMaintenance(!!settingData.isInMaintenance);
+          setNotifyAdminOnNewListing(!!settingData.notifyAdminOnNewListing);
           setMsgFr(settingData.maintenanceMessage?.fr || "Le site est actuellement en maintenance. Nous serons bientôt de retour !");
           setMsgAr(settingData.maintenanceMessage?.ar || "الموقع حالياً في الصيانة لتحسين خدماتنا. سنعود قريباً !");
           setMsgEn(settingData.maintenanceMessage?.en || "The site is currently under maintenance. We will be back shortly!");
@@ -70,6 +73,7 @@ export function AdminSettingsClient() {
         contactEmail,
         supportEmail,
         isInMaintenance,
+        notifyAdminOnNewListing,
         maintenanceMessage: {
           fr: msgFr,
           ar: msgAr,
@@ -83,6 +87,7 @@ export function AdminSettingsClient() {
         setContactEmail(updated.contactEmail || "");
         setSupportEmail(updated.supportEmail || "");
         setIsInMaintenance(!!updated.isInMaintenance);
+        setNotifyAdminOnNewListing(!!updated.notifyAdminOnNewListing);
         if (updated.maintenanceMessage) {
           setMsgFr(updated.maintenanceMessage.fr || "");
           setMsgAr(updated.maintenanceMessage.ar || "");
@@ -229,6 +234,50 @@ export function AdminSettingsClient() {
                   className="w-full p-3 bg-background border rounded-lg text-xs text-foreground focus:ring-2 focus:ring-amber-500 outline-none font-[#Noto Sans Arabic]"
                 />
               )}
+            </div>
+          </div>
+
+          
+          {/* New Listings Email Notification Control Card */}
+          <div className={`rounded-xl border p-6 transition-all shadow-sm ${
+            notifyAdminOnNewListing
+              ? "bg-emerald-950/10 border-emerald-500/50 dark:border-emerald-500/40"
+              : "bg-card border-border"
+          }`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`p-2.5 rounded-xl ${
+                  notifyAdminOnNewListing ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" : "bg-muted text-muted-foreground"
+                }`}>
+                  <BellRing className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+                    <span>Alertes E-mail Nouvelles Annonces</span>
+                    <span className={`px-2 py-0.5 text-[11px] font-extrabold rounded-full ${
+                      notifyAdminOnNewListing
+                        ? "bg-emerald-600 text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}>
+                      {notifyAdminOnNewListing ? "ACTIVÉ" : "DÉSACTIVÉ"}
+                    </span>
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Recevoir un e-mail de notification au support technique à chaque création d'annonce.
+                  </p>
+                </div>
+              </div>
+
+              {/* Switch Toggle */}
+              <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                <input
+                  type="checkbox"
+                  checked={notifyAdminOnNewListing}
+                  onChange={(e) => setNotifyAdminOnNewListing(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-12 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+              </label>
             </div>
           </div>
 
