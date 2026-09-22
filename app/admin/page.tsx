@@ -90,7 +90,7 @@ export default async function AdminDashboardPage() {
             </CardHeader>
             <CardContent>
               {listingsRes?.data?.length ? (
-                <DataTable headers={["Titre", "Catégorie", "Prix", "Vendeur", "KPIs (Vues/Appels/Msgs)", "Statut", "Date de publication"]}>
+                <DataTable headers={["Titre", "Catégorie", "Prix", "Vendeur", "Source", "KPIs (Vues/Appels/Msgs)", "Statut", "Date de publication"]}>
                   {listingsRes.data.map((listing) => {
                     const sellerUser = listing.sellerId;
                     const sellerName = typeof sellerUser === "object" && sellerUser
@@ -112,6 +112,17 @@ export default async function AdminDashboardPage() {
                           {listing.price} DH
                         </td>
                         <td className="px-4 py-3 text-sm text-muted-foreground">{sellerName}</td>
+                        <td className="px-4 py-3 text-sm">
+                          {listing.source === "web_app" ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50">
+                              🌐 Web
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300 border border-purple-200 dark:border-purple-900/50">
+                              📱 Mobile
+                            </span>
+                          )}
+                        </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1.5 text-xs">
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900/50 font-medium" title="Vues">

@@ -122,6 +122,7 @@ export type Listing = {
   callsCount?: number;
   messagesCount?: number;
   isDeleted: boolean;
+  source?: "web_app" | "mobile_app";
   createdAt: string;
   updatedAt: string;
 };

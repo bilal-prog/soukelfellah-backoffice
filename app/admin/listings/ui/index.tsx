@@ -237,6 +237,7 @@ export function AdminListingsClient() {
             "Catégorie",
             "Prix",
             "Vendeur",
+            "Source",
             "KPIs / Engagements",
             "Province",
             "Statut",
@@ -317,6 +318,17 @@ export function AdminListingsClient() {
                 </td>
                 <td className="px-4 py-3 text-sm text-muted-foreground">
                   {seller}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  {listing.source === "web_app" ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50">
+                      🌐 Web App
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300 border border-purple-200 dark:border-purple-900/50">
+                      📱 Mobile App
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5 text-xs">
@@ -544,6 +556,14 @@ export function AdminListingsClient() {
                     {selectedListing.listingDirection === "SELL"
                       ? "Offre (Vente)"
                       : "Demande (Achat)"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-xs">
+                    Source d'origine
+                  </span>
+                  <span className="font-semibold text-foreground">
+                    {selectedListing.source === "web_app" ? "🌐 Site Web (Web App)" : "📱 Application Mobile (Mobile App)"}
                   </span>
                 </div>
                 <div>
